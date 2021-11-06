@@ -1,0 +1,8 @@
+---
+- name: apache-installation
+  hosts: all
+  tasks:
+    - name: update ubuntu and install apache
+      apt: apache2
+      update_cache: yes
+      state: present
