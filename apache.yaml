@@ -1,3 +1,4 @@
+# Ansible template for installing Apache2 on ubuntu server
 ---
 - name: apache-installation
   hosts: all
