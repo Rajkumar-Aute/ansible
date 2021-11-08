@@ -2,6 +2,7 @@
 ---
 - name: apache-installation
   hosts: all
+  become: yes
   tasks:
     - name: update ubuntu and install apache
       apt: 
