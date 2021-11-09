@@ -1,0 +1,48 @@
+---
+- name: spring pet clinic
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: os upgrade and cache update
+    update_cache: yes
+    upgrade: yes
+    
+  - name: ensure openjdk 11 avilable
+    apt: openjdk-11-jdk
+    state: present
+    
+  - name: download jar
+    get: https://rajshared.s3.amazonaws.com/spring-petclinic.jar
+
+  - name: create directory
+    ansible.builtin.file:
+      path: /usr/share/springpetclinic/ 
+  
+  - name: copy file into usr filder
+    copy: ./spring-petclinic.jar /usr/share/springpetclinic/
+
+  - name: springpetclinicuser
+    ansible.builtin.user:
+      name: springpetclinicuser
+      password: springpetclinicuser
+      state: present
+
+  - name: changing owner and permission
+    ansible.builtin.file:
+      path: /usr/share/springpetclinic/spring-petclinic.jar
+      owner: springpetclinicuser
+      group: springpetclinicuser
+      mode: '0500'
+      state: file
+
+  - name: copy service file
+    ansible.builtin.file:
+      src: springpetclinic.service
+      dest: /etc/systemd/system/springpetcllinic.service
+
+  - name:
+    ansible.builtin.systemd:
+      status: started
+      name: springpetclinic.service
+      enabled: yes
