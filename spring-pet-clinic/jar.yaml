@@ -2,25 +2,27 @@
 - name: spring pet clinic
   hosts: all
   become: yes
-
   tasks:
   - name: os upgrade and cache update
-    update_cache: yes
-    upgrade: yes
+    apt:
+      update_cache: "yes"
+      upgrade: "yes"
     
   - name: ensure openjdk 11 avilable
-    apt: openjdk-11-jdk
-    state: present
-    
-  - name: download jar
-    get: https://rajshared.s3.amazonaws.com/spring-petclinic.jar
+    apt: 
+      name: openjdk-11-jdk
+      state: present
 
   - name: create directory
     ansible.builtin.file:
-      path: /usr/share/springpetclinic/ 
-  
-  - name: copy file into usr filder
-    copy: ./spring-petclinic.jar /usr/share/springpetclinic/
+      path: /usr/share/springpetclinic/
+      state: directory 
+
+  - name: download jar
+    get_url: 
+      url: https://rajshared.s3.amazonaws.com/spring-petclinic.jar
+      dest: /usr/share/springpetclinic/
+      force: no
 
   - name: springpetclinicuser
     ansible.builtin.user:
@@ -37,12 +39,16 @@
       state: file
 
   - name: copy service file
-    ansible.builtin.file:
+    ansible.builtin.copy:
       src: springpetclinic.service
-      dest: /etc/systemd/system/springpetcllinic.service
+      dest: /etc/systemd/system/springpetclinic.service
 
-  - name:
+  - name: enable and start service
     ansible.builtin.systemd:
-      status: started
+      daemon_reload: "yes"
+
+  - name: enable and start service
+    ansible.builtin.systemd:
       name: springpetclinic.service
+      state: started
       enabled: yes

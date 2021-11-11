@@ -2,7 +2,7 @@
 linux commends to install jar app
 ```
 sudo apt update
-sudo apt install openjdk-11-jdk -y
+sudo apt install openjdk-11-jdk wget -y
 wget https://rajshared.s3.amazonaws.com/spring-petclinic.jar
 sudo cp spring-petclinic.jar /usr/share/springpetclinic/
 sudo adduser springbootuser
