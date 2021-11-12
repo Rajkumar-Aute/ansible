@@ -1,0 +1,31 @@
+---
+# hosts is a inventory files used to select host machines to install application using ip address or dns name of the server
+# group of the server 
+all:
+  vars: 
+    app_dir: /usr/share/springpetclinic/
+    app_jar: spring-petclinic.jar
+    download_url: https://rajshared.s3.amazonaws.com/spring-petclinic.jar
+    app_user: springpetclinicuser
+    app_password: springpetclinicuser
+
+  hosts:
+  children:
+    ubuntu:
+      hosts:
+#        192.168.56.105
+#        192.168.56.101
+         localhost
+      vars:
+        open_jdk: openjdk-11-jdk
+#    centos:
+#       vars:
+#         open_jdk: java-11-openjdk
+#      hosts:
+#        192.168.56.xxx
+#    web-servers:
+#      hosts:
+#        xxx.xxx.xxx.xxx
+#    db-server:
+#      hosts:
+#        xxx.xxx.xxx.xxx
