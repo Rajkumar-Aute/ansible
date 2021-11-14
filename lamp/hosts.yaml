@@ -2,12 +2,8 @@
 # hosts is a inventory files used to select host machines to install application using ip address or dns name of the server
 # group of the server 
 all:
-  vars: 
-    app_dir: /usr/share/springpetclinic/
-    app_jar: spring-petclinic.jar
-    download_url: https://rajshared.s3.amazonaws.com/spring-petclinic.jar
-    app_user: springpetclinicuser
-    app_password: springpetclinicuser
+  vars:
+    info_php_path: /var/www/html/info.php
 
   hosts:
   children:
@@ -17,12 +13,20 @@ all:
 #        192.168.56.101
          localhost
       vars:
-        open_jdk: openjdk-11-jdk
+        apache_package: apache2
+        php_package:
+        - php
+        - php-mysql
+        - libapache2-mod-php
     centos:
       vars:
-         open_jdk: java-11-openjdk
+        apache_package: httpd
+        php_package:
+        - php
+        - php-mysql
+        - php-fpm
       hosts:
-        192.168.29.199
+        192.168.56.106
 #    web-servers:
 #      hosts:
 #        xxx.xxx.xxx.xxx

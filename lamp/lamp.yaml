@@ -1,0 +1,47 @@
+---
+- name: LAMP stack on ubuntu and centos
+  hosts: all
+  become: yes
+  tasks:
+  - name: Fail to execution is OS is not ubuntu or centos
+    fail:
+      msg: "this playbook only works with ubuntu and centos, for other flavor OS the script will be avilable soon"
+    when: ansible_facts['distribution'] != "Ubuntu" and ansible_facts['distribution'] !="CentOS"
+
+  - name: apache installation on ubuntu and centos
+    package:
+      name: "{{ apache_package }}"
+      state: present
+      update_cache: yes
+    notify:
+    - log installed apache server
+
+  - name: install php package
+    package: 
+      name: "{{ item }}"
+      state: present
+    loop: "{{ php_package }}"
+
+  - name: copy info.php files
+    ansible.builtin.copy:
+      src: info.php
+      dest: "{{ info_php_path }}"
+    notify:
+     - log info page is copied
+     - restart apache service
+  - name: ensure apache sesrvice is running
+    service:
+      name: "{{ apache_package }}"
+      state: started
+      enabled: "yes"
+  handlers:
+  - name: log installed apache server
+    debug:
+      msg: "apache server installed using package {{ apache_package}}"
+  - name: log info page is copied
+    debug:
+      msg: " info page is coppied to {{ info_php_path }}"
+  - name: restart apache service
+    service:
+      name: "{{ apache_package }}"
+      state: restarted    
