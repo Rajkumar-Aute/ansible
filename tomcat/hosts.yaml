@@ -1,0 +1,31 @@
+---
+# hosts is a inventory files used to select host machines to install application using ip address or dns name of the server
+# group of the server 
+all:
+  vars:
+    tomcat_group: tomcat
+    tomcat_user: tomcat
+    tomcat_home_dir: /opt/tomcat
+    tomcat_url: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.54/bin/apache-tomcat-9.0.54.tar.gz
+    
+  hosts:
+  children:
+    ubuntu:
+      hosts:
+#        192.168.56.105
+#        192.168.56.101
+         localhost
+      vars:
+        java_package: openjdk-11-jdk
+        
+    centos:
+      vars:
+        java_package: java-11-openjdk
+      hosts:
+        192.168.56.110
+#    web-servers:
+#      hosts:
+#        xxx.xxx.xxx.xxx
+#    db-server:
+#      hosts:
+#        xxx.xxx.xxx.xxx
